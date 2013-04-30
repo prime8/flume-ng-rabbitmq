@@ -44,6 +44,7 @@ public class RabbitMQUtil {
 
     public static Map<String,String> getHeaders(BasicProperties properties){
         Preconditions.checkArgument(properties!=null, "properties cannot be null.");
+        @SuppressWarnings("unchecked")
         Map<String,String> headers = new CaseInsensitiveMap();
         setTimestamp(headers, properties);
 
