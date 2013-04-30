@@ -28,7 +28,7 @@ import org.junit.Before;
  *
  * @author jcustenborder
  */
-public class RabbitMQUtilTest {
+public class TestRabbitMQUtil {
     @Test
     public void close_null() {
         RabbitMQUtil.close(null, null);
