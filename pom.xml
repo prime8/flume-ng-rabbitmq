@@ -15,14 +15,14 @@
   <parent>
     <artifactId>flume-ng-channels</artifactId>
     <groupId>org.apache.flume</groupId>
-    <version>1.3.0-cdh4.2.0</version>
+    <version>1.3.0-cdh4.2.1</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.flume.flume-ng-channels</groupId>
   <artifactId>flume-rabbitmq-channel</artifactId>
   <packaging>jar</packaging>
-  <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
+  <version>1.3.0-cdh4.2.1-SNAPSHOT</version>
   <name>Flume.RabbitMQ</name>
   <url>http://maven.apache.org</url>
 
