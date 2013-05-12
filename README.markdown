@@ -22,7 +22,7 @@ Flume-ng RabbitMQ
 
 This project provides both a RabbitMQ source and sink for Flume-NG.  To use this plugin with your Flume installation, build from source using
 
-<pre>mvn package</pre>
+<pre>mvn clean package</pre>
 
 and put the resulting jar file in the lib directory in your flume installation.
 
