@@ -25,6 +25,7 @@ public class RabbitMQConstants {
     public final static String COUNTER_GET="rabbitmq.get";
     public final static String COUNTER_GET_MISS="rabbitmq.getmiss";
     public final static String COUNTER_ACK="rabbitmq.ack";
+    public final static String COUNTER_NACK="rabbitmq.nack";
     public final static String COUNTER_PUBLISH="rabbitmq.publish";
 
     public final static String CONFIG_HOSTNAME="hostname";

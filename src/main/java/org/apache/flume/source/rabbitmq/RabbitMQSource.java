@@ -18,6 +18,7 @@
  */
 package org.apache.flume.source.rabbitmq;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -177,6 +178,7 @@ public class RabbitMQSource extends AbstractSource implements Configurable, Poll
             if (log.isErrorEnabled())
                 log.error(this.getName() + " - Exception thrown while processing event", ex);
 
+            nackQuietly(response);
             return Status.BACKOFF;
         }
 
@@ -186,11 +188,21 @@ public class RabbitMQSource extends AbstractSource implements Configurable, Poll
         } catch(Exception ex){
             _CounterGroup.incrementAndGet(RabbitMQConstants.COUNTER_EXCEPTION);
             if(log.isErrorEnabled())log.error(this.getName() + " - Exception thrown while sending ack to queue", ex);
+
             resetConnection();
             return Status.BACKOFF;
         }
 
         return Status.READY;
+    }
+
+    private void nackQuietly(GetResponse response) {
+        try {
+            _Channel.basicNack(response.getEnvelope().getDeliveryTag(), false, true);
+            _CounterGroup.incrementAndGet(RabbitMQConstants.COUNTER_NACK);
+        } catch (IOException ex) {
+            if(log.isErrorEnabled())log.error(this.getName() + " - Exception thrown while sending nack to queue", ex);
+        }
     }
 
     /**

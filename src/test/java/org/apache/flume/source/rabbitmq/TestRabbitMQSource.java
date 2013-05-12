@@ -1,10 +1,10 @@
 package org.apache.flume.source.rabbitmq;
 
+import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -147,5 +147,24 @@ public class TestRabbitMQSource {
                     .appendText("]");
             }
         });
+    }
+
+    @Test
+    public void flumeProcessEventFailureShouldCauseRabbitMessageNack() throws Exception {
+        RabbitMQSource simplestSource = setUpSource(NO_QUEUE_NAME, NO_EXCHANGE_NAME);
+
+        expectSuccessfulConnection();
+        expectRabbitMessageReceived(rabbitMessageHeaders, RABBIT_MESSAGE_BODY, RABBIT_MESSAGE_ID);
+
+        Exception failure = new RuntimeException("testingChannelProcessorFailure");
+        doThrow(failure).when(channelProcessor).processEvent(anyEvent());
+
+        assertThat(simplestSource.process(), is(PollableSource.Status.BACKOFF));
+
+        verify(channel).basicNack(RABBIT_MESSAGE_ID, false, true);
+    }
+
+    private Event anyEvent() {
+        return argThat(any(Event.class));
     }
 }
