@@ -33,6 +33,7 @@ import org.apache.flume.source.AbstractSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -50,7 +51,22 @@ public class RabbitMQSource extends AbstractSource implements Configurable, Poll
     private String[] _Topics;
 
     public RabbitMQSource(){
-        _CounterGroup = new CounterGroup();
+        this (new CounterGroup());
+    }
+
+    @VisibleForTesting
+    protected RabbitMQSource(CounterGroup counterGroup){
+        _CounterGroup = counterGroup;
+    }
+
+    @VisibleForTesting
+    RabbitMQSource(CounterGroup counterGroup, ConnectionFactory connectionFactory,
+            String queueName, String exchangeName, String... topics) {
+        this(counterGroup);
+        _ConnectionFactory = connectionFactory;
+        _QueueName = queueName;
+        _ExchangeName = exchangeName;
+        _Topics = topics;
     }
 
     @Override
